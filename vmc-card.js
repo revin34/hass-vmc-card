@@ -5,7 +5,7 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
 
-class ComfoAirCard extends LitElement {
+class VMCCard extends LitElement {
   static get properties() {
     return {
       hass: {},
@@ -22,72 +22,22 @@ class ComfoAirCard extends LitElement {
               <div class="flex-col-out">
                   <div>${this.hass.states['sensor.vmc_aire_exterior_temperatura'].state}°C</div>
                   <div class="fan-state"><ha-icon icon="mdi:speedometer"></ha-icon></ha-icon> ${Math.trunc(this.hass.states['sensor.vmc_velocidad_suministro'].state)} rpm</div>
-                  <div>${this.hass.states['sensor.vmc_aire_extraido_temperatura'].state}°C</div>
+                  <div>${this.hass.states['sensor.vmc_aire_expulsado_temperatura'].state}°C</div>
                   <div class="fan-state"><ha-icon icon="mdi:speedometer"></ha-icon> ${Math.trunc(this.hass.states['sensor.vmc_velocidad_extraccion'].state)} rpm</div>
               </div>
-              <div class="flex-col-main">
-                  <div>${this.hass.states[this.config.entity].attributes.temperature}°C</div>
-                  <div><ha-icon class="spin" icon="mdi:${({'auto': 'fan', 'off': 'fan-off', low: 'fan-speed-1', medium: 'fan-speed-2', high: 'fan-speed-3'}[this.hass.states[this.config.entity].attributes.fan_mode])}"></ha-icon></div> 
-              </div>
               <div class="flex-col-in">
-                  <div>${this.hass.states['sensor.vmc_aire_expulsado_temperatura'].state}°C</div>
-                  <div class="fan-state"><ha-icon icon="mdi:fan"></ha-icon> ${Math.trunc(this.hass.states['sensor.return_air_level'].state)}%</div>
+                  <div>${this.hass.states['sensor.vmc_aire_extraido_temperatura'].state}°C</div>
+                  <div class="fan-state"><ha-icon icon="mdi:fan"></ha-icon> ${Math.trunc(this.hass.states['sensor.vmc_flujo'].state)}%</div>
                   <div>${this.hass.states['sensor.vmc_aire_impulsado'].state}°C</div>
-                  <div class="fan-state"><ha-icon icon="mdi:fan"></ha-icon> ${Math.trunc(this.hass.states['sensor.supply_air_level'].state)}%</div>
+                  <div class="fan-state"><ha-icon icon="mdi:fan"></ha-icon> ${Math.trunc(this.hass.states['sensor.vmc_flujo'].state)}%</div>
               </div>
           </div>
       </div>
-      </div>
-      <div class="info-row">
-      ${this.getFanTmpl()}
-      ${this.getAirFilterTmpl()}
-      ${this.getBypassTmpl()}
-      ${this.getPreHeatTmpl()}
-      ${this.getSummerModeTmpl()}
       </div>
     </ha-card>  
     `;
   }
 
-  getFanTmpl(){
-    if(this.hass.states['binary_sensor.supply_fan'].state == 'on'){
-      return html`<ha-icon icon="mdi:fan"></ha-icon>`;
-    }else{
-      return html`<ha-icon class="inactive" icon="mdi:fan"></ha-icon>`;
-    }
-  }
-
-  getAirFilterTmpl(){
-    if(this.hass.states['binary_sensor.vmc_filtro_alarma'].state != 'on'){
-      return html`<ha-icon class="inactive" icon="mdi:air-filter"></ha-icon>`;
-    }else{
-      return html`<ha-icon class="warning" icon="mdi:air-filter"></ha-icon>`;
-    }
-  }
-
-  getBypassTmpl(){
-    if(this.hass.states['switch.vmc_by_pass_manual'].state == 'on'){
-      return html`<ha-icon icon="mdi:electric-switch"></ha-icon>`;
-    }else{
-      return html`<ha-icon class="inactive" icon="mdi:electric-switch"></ha-icon>`;
-    }
-  }
-
-  getPreHeatTmpl(){
-    if(this.hass.states['binary_sensor.preheating'].state == 'on'){
-      return html`<ha-icon icon="mdi:radiator"></ha-icon>`;
-    }else{
-      return html`<ha-icon class="inactive" icon="mdi:radiator"></ha-icon>`;
-    }
-  }
-
-  getSummerModeTmpl(){
-    if(this.hass.states['binary_sensor.summer_mode'].state == 'off'){
-      return html`<ha-icon icon="mdi:snowflake"></ha-icon>`;
-    }else{
-      return html`<ha-icon class="inactive" icon="mdi:weather-sunny"></ha-icon>`;
-    }
-  }
 
   setConfig(config) {
     this.config = config;
@@ -182,4 +132,4 @@ class ComfoAirCard extends LitElement {
     `;
   }
 }
-customElements.define("comfoair-card", ComfoAirCard);
+customElements.define("vmc-card", VMCCard);
